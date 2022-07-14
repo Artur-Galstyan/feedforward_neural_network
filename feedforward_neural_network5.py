@@ -125,8 +125,8 @@ def full_backpropagation(target, prediction, memory, param_values, nn_architectu
 
 def update(param_values, gradients, nn_architecture, learning_rate):
     for idx, layer in enumerate(nn_architecture):
-        param_values[f"w_{idx}"] -= learning_rate * gradients[f"dW_{idx}"]
-        param_values[f"b_{idx}"] -= learning_rate * gradients[f"dB_{idx}"]
+        param_values[f"w_{idx}"] -= learning_rate * gradients[f"dW_{idx-1}"]
+        param_values[f"b_{idx}"] -= learning_rate * gradients[f"dB_{idx-1}"].mean()
     return param_values
 
 
@@ -175,14 +175,17 @@ def main():
     y_test = ohe.transform(y_test).toarray()
     y_test = split_into_batches(np.array(y_test), 1)
 
-    x = X_train[0][0]
-    y = y_train[0][0]
+    n_epochs = 200
+    learning_rate = 0.1
+    for epoch in tqdm(range(n_epochs)):
 
-    a, memory = full_forward_propagation(x, param_values, nn_architecture)
-    gradients = full_backpropagation(y, a, memory, param_values, nn_architecture)
+        for x, y in zip(X_train, y_train):
+            a, memory = full_forward_propagation(x, param_values, nn_architecture)
+            gradients = full_backpropagation(y, a, memory, param_values, nn_architecture)
 
+            param_values = update(param_values, gradients, nn_architecture, learning_rate)
+        
 
-    for epcoh 
 
 if __name__ == "__main__":
     main()
