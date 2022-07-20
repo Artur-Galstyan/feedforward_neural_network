@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 
 # To ensure reproducibility
@@ -61,5 +62,39 @@ def get_mnist(batch_size=64, random_seed=42):
     return X_train, y_train, X_test, y_test
 
 
-X_train, y_train, X_test, y_test = get_mnist()
-print()
+def initialise_weights_and_biases(nn_architecture):
+    parameters = {}
+    for idx, layer in enumerate(nn_architecture):
+        n_input = layer["in"]
+        n_output = layer["out"]
+
+        parameters[f"weights {idx}->{idx+1}"] = np.random.randn(n_input, n_output) * 0.1
+        parameters[f"bias {idx+1}"] = (
+            np.random.randn(
+                n_output,
+            )
+            * 0.1
+        )
+
+    return parameters
+
+
+def sigmoid(Z):
+    return 1 / (1 + np.exp(-Z))
+
+
+def relu(Z):
+    return np.maximum(0, Z)
+
+
+def main():
+    neural_network = [
+        {"in": 784, "out": 16, "activation": "relu"},
+        {"in": 16, "out": 10, "activation": "sigmoid"},
+    ]
+
+    parameters = initialise_weights_and_biases(neural_network)
+
+
+if __name__ == "__main__":
+    main()
