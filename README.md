@@ -1,1 +1,1 @@
-# feedforward_neural_network
+This is an implementation of a neural network using numpy. You can check out my (https://arturgalstyan.dev/blog/neural_network_in_numpy)[blog post] to see how the math behind it works.
