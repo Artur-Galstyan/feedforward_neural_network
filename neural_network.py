@@ -1,19 +1,13 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
-# To ensure reproducibility
-np.random.seed(42)
-
-neural_network = [
-    {"in": 784, "out": 16, "activation": "relu"},
-    {"in": 16, "out": 10, "activation": "sigmoid"},
-]
-
-
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import fetch_openml
 from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 from joblib import Memory
+
+
+# To ensure reproducibility
+np.random.seed(42)
 
 
 def get_mnist(batch_size=64, random_seed=42):
@@ -195,7 +189,9 @@ def get_current_accuracy(param_values, nn_architecture, X_test, y_test):
 
 def main():
     neural_network = [
-        {"in": 784, "out": 16, "activation": "relu"},
+        {"in": 784, "out": 64, "activation": "relu"},
+        {"in": 64, "out": 32, "activation": "relu"},
+        {"in": 32, "out": 16, "activation": "relu"},
         {"in": 16, "out": 10, "activation": "sigmoid"},
     ]
     X_train, y_train, X_test, y_test = get_mnist()
@@ -209,7 +205,7 @@ def main():
             grads = backward(y, a, memory, parameters, neural_network)
             update(parameters, grads, neural_network, learning_rate)
         accuracy = get_current_accuracy(parameters, neural_network, X_test, y_test)
-        print(f"Epoch {epoch} Accuracy = {np.round(accuracy, 4) * 100}%")
+        print(f"Epoch {epoch} Accuracy = {np.round(accuracy * 100, 4) }%")
 
 
 if __name__ == "__main__":
